@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Bikijada_MVC.Models.Oklada>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Ime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Iznos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bik)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlasnik)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Iznos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bik)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlasnik)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

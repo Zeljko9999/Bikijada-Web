@@ -1,0 +1,54 @@
+﻿@model Bik
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Bik</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Kategorija):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Kategorija)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Vlasnik):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Vlasnik.Ime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ime):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ime)
+        </dd>
+        @if (ViewBag.ownedFights.Count > 0)
+        {
+            <dt class="col-sm-2">
+                Borbe (protivnici):
+            </dt>
+
+            <dd class="col-sm-10">
+                @foreach (var bull in ViewBag.bulli)
+                {   
+                    <div>
+                        @bull
+                    </div>
+                }
+            </dd>
+        }
+        else {  }
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
