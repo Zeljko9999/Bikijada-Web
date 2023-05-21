@@ -1,3 +1,3 @@
 # Bikijada_MVC
 
-Seminarski rad iz kolegija Napredne web tehnologija. Rad je nedovršen i trenutno u izradi
+Seminarski rad iz kolegija Naprednih web tehnologija. Rad je nedovršen i trenutno u izradi
