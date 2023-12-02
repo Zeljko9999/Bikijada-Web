@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1 style="padding-top:20px; padding-bottom:10px">Lista oklada</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -20,10 +20,13 @@
                 @Html.DisplayNameFor(model => model.Iznos)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bik)
+                @Html.DisplayNameFor(model => model.Kategorija)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Vlasnik)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bik)
             </th>
             <th></th>
         </tr>
@@ -37,12 +40,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Iznos)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Bik)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Vlasnik)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kategorija)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vlasnik)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bik.Ime)
+                </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
@@ -52,3 +58,7 @@
 }
     </tbody>
 </table>
+
+<div id="back" style="height:100px; margin-bottom:10px">
+    <a asp-action="More">Pretraži prema bikovima</a>
+</div>

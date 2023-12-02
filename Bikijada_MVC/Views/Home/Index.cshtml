@@ -1,8 +1,68 @@
-﻿@{
+﻿@model Bikijada_MVC.Models.Home
+
+@{
     ViewData["Title"] = "Home Page";
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+
+<body>
+    <h3 id="bikijada">Bikijada Šestanovac - Bizonova arena - 21.04.2024</h3>
+    <h2 id="dobrodosli">Dobrodošli!</h2>
+    <div id="root"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>
+    <script src="@Url.Content("~/js/App.jsx")"></script>
+    <link rel="stylesheet" href="~/css/Home.css" />
+
+
+<!-- Kontakt forma -->
+
+    <section id="kontakt" style="background-color:orange">
+    <h2>Kontaktirajte nas</h2>
+     <form asp-action="Index">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-control">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" type="email" id="mail" placeholder="example@mail.com" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-control">
+            <label asp-for="Naslov"></label>
+            <input asp-for="Naslov" type="text" id="naslov" placeholder="Naslov poruke" />
+            <span asp-validation-for="Naslov" class="text-danger"></span>
+        </div>
+
+        <div class="form-control">
+            <label asp-for="Poruka"></label>
+            <textarea asp-for="Poruka" id="poruka" rows="4" placeholder="Poruka do 300 znakova"></textarea>
+            <span asp-validation-for="Poruka" class="text-danger"></span>
+        </div>
+
+        <button class="btn btn-primary" type="submit" value="Save">Pošalji</button>
+    </form>
+
+        <div>
+            <a asp-action="Details">Pregledaj poruke</a>
+        </div>
+        <br>
+
+</section>
+
+<div style="height:60px"></div>
+
+</body>
+
+</html>

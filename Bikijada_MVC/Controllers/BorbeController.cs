@@ -15,6 +15,7 @@ namespace Bikijada_MVC.Controllers
     {
         private BikijadaContext db = new BikijadaContext();
 
+        List<string> kategorijaList = new List<string> { "Poluteška", "Teška" };
 
         // GET: Borbe
         public ActionResult Index()
@@ -33,7 +34,7 @@ namespace Bikijada_MVC.Controllers
             var borba = db.Borba.Include(r => r.Bik1).Include(r => r.Bik2).SingleOrDefault(x => x.ID == id);
             if (borba == null)
             {
-                return NotFound(); ;
+                return NotFound();
             }
             return View(borba);
         }
@@ -43,11 +44,13 @@ namespace Bikijada_MVC.Controllers
         {
             var vlasnici = db.Vlasnik;
 
-            int firstId = vlasnici.FirstOrDefault().ID;
+            int? firstId = vlasnici.FirstOrDefault()?.ID;
             ViewBag.Vlasnik1 = new SelectList(vlasnici, "Ime", "Ime", firstId);
-            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId), "ID", "Ime");
+            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime");
             ViewBag.Vlasnik2 = new SelectList(vlasnici, "Ime", "Ime", firstId);
-            ViewBag.Bik2Id = new SelectList(db.Bik.Where(b => b.VlasnikId.Equals(firstId)), "ID", "Ime");
+            ViewBag.Bik2Id = new SelectList(db.Bik.Where(b => b.VlasnikId.Equals(firstId) && b.Kategorija == "Poluteška"), "ID", "Ime");
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
 
             return View();
         }
@@ -57,7 +60,7 @@ namespace Bikijada_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("ID,Date,Vlasnik1,Bik1Id,Vlasnik2,Bik2Id")] Borba borba)
+        public ActionResult Create([Bind("ID,Date,Kategorija,Vlasnik1,Bik1Id,Vlasnik2,Bik2Id")] Borba borba)
         {
             if (ModelState.IsValid && borba.Bik1Id != borba.Bik2Id)
             {
@@ -67,13 +70,14 @@ namespace Bikijada_MVC.Controllers
             }
 
             int firstId = db.Vlasnik.FirstOrDefault().ID;
-            ViewBag.Vlasnik1 = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
-            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId), "ID", "Ime", borba.Bik1Id);
-            ViewBag.Vlasnik2 = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
-            ViewBag.Bik2Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId), "ID", "Ime", borba.Bik2Id);
+            ViewBag.Vlasnik1 = new SelectList(db.Vlasnik, "Ime", "Ime", borba.Vlasnik1);
+            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime", borba.Bik1Id);
+            ViewBag.Vlasnik2 = new SelectList(db.Vlasnik, "Ime", "Ime", borba.Vlasnik1);
+            ViewBag.Bik2Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime", borba.Bik2Id);
 
-            
-           return View(borba);
+            ViewBag.Kategorija = new SelectList(kategorijaList);
+
+            return View(borba);
         }
 
         // GET: Borbe/Edit/5
@@ -88,10 +92,28 @@ namespace Bikijada_MVC.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Bik1Id = new SelectList(db.Bik, "ID", "Ime", borba.Bik1Id);
+
+            int vlasnik1Idd = 0;
+            ViewBag.newOwner = db.Vlasnik.Where(x => x.Ime == borba.Vlasnik1).ToList();
+            foreach (var owner in ViewBag.newOwner)
+            {
+                vlasnik1Idd = owner.ID;
+            }
+
+            int vlasnik2Idd = 0;
+            ViewBag.newOwner = db.Vlasnik.Where(x => x.Ime == borba.Vlasnik2).ToList();
+            foreach (var owner in ViewBag.newOwner)
+            {
+                vlasnik2Idd = owner.ID;
+            }
+
+
             ViewBag.Vlasnik1 = new SelectList(db.Vlasnik, "Ime", "Ime", borba.Vlasnik1);
-            ViewBag.Bik2Id = new SelectList(db.Bik, "ID", "Ime", borba.Bik2Id);
+            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == vlasnik1Idd && b.Kategorija== borba.Kategorija), "ID", "Ime", borba.Bik1Id);
             ViewBag.Vlasnik2 = new SelectList(db.Vlasnik, "Ime", "Ime", borba.Vlasnik2);
+            ViewBag.Bik2Id = new SelectList(db.Bik.Where(b => b.VlasnikId == vlasnik2Idd && b.Kategorija == borba.Kategorija), "ID", "Ime", borba.Bik2Id);
+
+            ViewBag.Kategorija = new SelectList(kategorijaList,borba.Kategorija);
             return View(borba);
         }
 
@@ -100,7 +122,7 @@ namespace Bikijada_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind("ID,Date,Bik1Id,Vlasnik1,Bik2Id,Vlasnik2")] Borba borba)
+        public ActionResult Edit([Bind("ID,Date,Kategorija,Vlasnik1,Bik1Id,Vlasnik2,Bik2Id")] Borba borba)
         {
             if (ModelState.IsValid && borba.Bik1Id != borba.Bik2Id)
             {
@@ -108,10 +130,28 @@ namespace Bikijada_MVC.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Bik1Id = new SelectList(db.Bik, "ID", "Ime", borba.Bik1Id);
+
+            int vlasnik1Idd = 0;
+            ViewBag.newOwner = db.Vlasnik.Where(x => x.Ime == borba.Vlasnik1).ToList();
+            foreach (var owner in ViewBag.newOwner)
+            {
+                vlasnik1Idd = owner.ID;
+            }
+
+            int vlasnik2Idd = 0;
+            ViewBag.newOwner = db.Vlasnik.Where(x => x.Ime == borba.Vlasnik2).ToList();
+            foreach (var owner in ViewBag.newOwner)
+            {
+                vlasnik2Idd = owner.ID;
+            }
+
+
             ViewBag.Vlasnik1 = new SelectList(db.Vlasnik, "Ime", "Ime", borba.Vlasnik1);
-            ViewBag.Bik2Id = new SelectList(db.Bik, "ID", "Ime", borba.Bik2Id);
+            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == vlasnik1Idd && b.Kategorija == borba.Kategorija), "ID", "Ime", borba.Bik1Id);
             ViewBag.Vlasnik2 = new SelectList(db.Vlasnik, "Ime", "Ime", borba.Vlasnik2);
+            ViewBag.Bik2Id = new SelectList(db.Bik.Where(b => b.VlasnikId == vlasnik2Idd && b.Kategorija == borba.Kategorija), "ID", "Ime", borba.Bik2Id);
+
+            ViewBag.Kategorija = new SelectList(kategorijaList, borba.Kategorija);
             return View(borba);
         }
 

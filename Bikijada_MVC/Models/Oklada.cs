@@ -8,21 +8,23 @@ namespace Bikijada_MVC.Models
         public int ID { get; set; }
 
         [Required, StringLength(128, MinimumLength = 2)]
-        [Display(Name = "Ime uplatitelja")]
+        [Display(Name = "Uplatitelj")]
         public string Ime { get; set; }
 
         [Required]
-        [Display(Name = "Iznos u eurima")]
+        [Display(Name = "Iznos (€)")]
+        [Range(0.0, double.MaxValue, ErrorMessage = "Vrijednost mora biti pozitivan broj")]
         public float Iznos { get; set; }
 
-        public Borba Borba { get; set; }
+        [Display(Name = "Kategorija")]
+        public string Kategorija { get; set; }
 
-        [Display(Name = "Ime bika")]
-        public string Bik { get; set; }
-
-        [Display(Name = "Ime vlasnika")]
+        [Display(Name = "Vlasnik")]
         public string Vlasnik { get; set; }
 
+        public int BikId { get; set; }
+        [Display(Name = "Bik")]
+        public virtual Bik? Bik { get; set; }
 
     }
 }

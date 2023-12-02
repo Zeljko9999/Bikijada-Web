@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1 style="padding-top:20px; padding-bottom:10px">Edit</h1>
 
-<h4>Borba</h4>
+<h4 style="padding-top:20px; padding-bottom:10px">Borba</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,30 +18,45 @@
                 <label asp-for="Date" class="control-label"></label>
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
-            </div>           
-            <div class="form-group">
-                <label asp-for="Vlasnik1" class="control-label"></label>
-                <select asp-for="Vlasnik1" class="form-control" asp-items="ViewBag.Vlasnik1"></select>
-                <span asp-validation-for="Vlasnik1" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Bik1Id" class="control-label"></label>
-                <select asp-for="Bik1Id" class="form-control" asp-items="ViewBag.Bik1Id"></select>
-                <span asp-validation-for="Bik1Id" class="text-danger"></span>
-            </div>  
+                @Html.LabelFor(model => model.Kategorija, "Kategorija", htmlAttributes: new { @class = "control-label"})
+                <div class="col-md-10">
+                    @Html.DropDownList("Kategorija", null, htmlAttributes: new { @class = "form-control", @onchange = "UpdateBulls1(); UpdateBulls2();" })
+                    @Html.ValidationMessageFor(model => model.Kategorija, "", new { @class = "text-danger" })
+                </div>
+            </div>
             <div class="form-group">
-                <label asp-for="Vlasnik2" class="control-label"></label>
-                <select asp-for="Vlasnik2" class="form-control" asp-items="ViewBag.Vlasnik2"></select>
-                <span asp-validation-for="Vlasnik2" class="text-danger"></span>
+                @Html.LabelFor(model => model.Vlasnik1, "Vlasnik 1. bika", htmlAttributes: new { @class = "control-label"})
+                <div class="col-md-10">
+                    @Html.DropDownList("Vlasnik1", null, htmlAttributes: new { @class = "form-control", @onchange = "UpdateBulls1()" })
+                    @Html.ValidationMessageFor(model => model.Vlasnik1, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Bik1Id, "1. bik", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Bik1Id", null, htmlAttributes: new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.Bik1Id, "", new { @class = "text-danger" })
+                </div>
             </div>
 
             <div class="form-group">
-                <label asp-for="Bik2Id" class="control-label"></label>
-                <select asp-for="Bik2Id" class="form-control" asp-items="ViewBag.Bik2Id"></select>
-                <span asp-validation-for="Bik2Id" class="text-danger"></span>
+                @Html.LabelFor(model => model.Vlasnik2, "Vlasnik 2. bika", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Vlasnik2", null, htmlAttributes: new { @class = "form-control", @onchange = "UpdateBulls2()" })
+                    @Html.ValidationMessageFor(model => model.Vlasnik2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Bik2Id, "2. bik", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Bik2Id", null, htmlAttributes: new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.Bik2Id, "", new { @class = "text-danger" })
+                </div>
             </div>
 
-            <div class="form-group">
+            <div style="margin-top: 12px" class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -51,7 +66,59 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<div style="height:60px"></div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        async function UpdateBulls1() {
+            const vlasnikName = document.getElementById("Vlasnik1")?.value
+            const Kategorija = document.getElementById("Kategorija")?.value
+
+            const formData = new FormData();
+            formData.append('vlasnikName', vlasnikName);
+            formData.append('Kategorija', Kategorija);
+
+            let response = await fetch('/Bikovi/GetBullsForOwner', {
+                method: 'POST',
+                body: formData
+            })
+
+            const bikovi = await response.json();
+            let bSelectList = document.getElementById("Bik1Id");
+            bSelectList.innerHTML = " ";
+            bikovi.forEach(function (bik) {
+                const option = document.createElement("option");
+                option.value = bik.id;
+                option.innerHTML = bik.ime;
+                bSelectList.appendChild(option);
+            })
+        }
+
+        async function UpdateBulls2() {
+            const vlasnikName = document.getElementById("Vlasnik2")?.value
+            const Kategorija = document.getElementById("Kategorija")?.value
+
+            const formData = new FormData();
+            formData.append('vlasnikName', vlasnikName)
+            formData.append('Kategorija', Kategorija);
+
+            let response = await fetch('/Bikovi/GetBullsForOwner', {
+                method: 'POST',
+                body: formData
+            })
+
+            const bikovi = await response.json();
+            let bSelectList = document.getElementById("Bik2Id");
+            bSelectList.innerHTML = " ";
+            bikovi.forEach(function (bik) {
+                const option = document.createElement("option");
+                option.value = bik.id;
+                option.innerHTML = bik.ime;
+                bSelectList?.appendChild(option);
+            })
+        }
+
+    </script>
 }

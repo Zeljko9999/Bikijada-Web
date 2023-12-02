@@ -9,21 +9,23 @@ namespace Bikijada_MVC.Models
 
         [Required(ErrorMessage = "Odaberite datum i vrijeme")]
         [Display(Name = "Datum i vrijeme borbe")]
-        [DataType(DataType.DateTime, ErrorMessage = "pimjer: gggg-mm-dd hh:mm:ss")]
         public DateTime Date { get; set; }
 
-        [Display(Name = "Vlasnik prvog bika")]
+        [Display(Name = "Kategorija")]
+        public string Kategorija { get; set; }
+
+        [Display(Name = "Vlasnik 1. bika")]
         public string Vlasnik1 { get; set; }
 
         public int? Bik1Id { get; set; }
-        [Display(Name = "Prvi bik")]
+        [Display(Name = "1. bik")]
         public virtual Bik? Bik1 { get; set; }
 
-        [Display(Name = "Vlasnik drugog bika")]
+        [Display(Name = "Vlasnik 2. bika")]
         public string Vlasnik2 { get; set; }
 
-        public int Bik2Id { get; set; }
-        [Display(Name = "Drugi bik")]
+        public int? Bik2Id { get; set; }
+        [Display(Name = "2. bik")]
         public virtual Bik? Bik2 { get; set; }
 
     }

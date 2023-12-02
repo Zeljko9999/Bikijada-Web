@@ -1,0 +1,126 @@
+﻿body {
+}
+
+/* ########### KONTAKT FORMA ########### */
+form {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+.form-control {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin-bottom: 20px;
+    text-align: start;
+    border: 0px solid #ced4da
+}
+
+label::before {
+    content: "*";
+    color: #c00a27;
+    padding-right: 4px;
+}
+
+input,
+textarea {
+    margin-top: 4px;
+    padding: 8px 16px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    font-family: "Mali", cursive;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+textarea {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100px;
+    max-height: 250px;
+}
+
+    input::placeholder,
+    textarea::placeholder,
+    input::-webkit-input-placeholder,
+    textarea::-webkit-input-placeholder,
+    input::-moz-placeholder,
+    textarea::-moz-placeholder,
+    input:-ms-input-placeholder,
+    textarea:-ms-input-placeholder {
+        opacity: 0.5;
+    }
+
+/*button {
+    display: block;
+    min-width: 150px;
+    padding: 8px 16px;
+    margin: 12px auto;
+    color: white;
+    font-size: 16px;
+    line-height: 1.5;
+    font-family: "Mali", cursive;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: #c00a27;
+} */
+
+section {
+    padding: 80px 0 40px;
+    text-align: center;
+}
+
+section h2 {
+    font-size: 30px;
+    margin: 0;
+}
+    /* '::after' -> pseudo-element */
+    section h2::after {
+        content: "";
+        display: block;
+        width: 100px;
+        height: 4px;
+        background-color: #c00a27;
+        margin: 8px auto 0;
+    }
+
+.background-container {
+    height: 700px;
+    background-image: url('/Images/bikijada1.jpeg');
+    background-size: cover; /* Adjust the size to cover the entire container */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+    background-position: center bottom ; /* Center the image both horizontally and vertically */
+
+}
+
+#dobrodosli {
+    text-align: center;
+    font-size: 47px;
+    padding-bottom: 30px;
+    padding-top: 20px;
+    font-family: Brush Script MT, Brush Script Std, cursive;
+}
+
+#bikijada {
+    text-align: center;
+    font-size: 50px;
+    padding-bottom: 10px;
+    padding-top: 20px;
+    font-family: Jazz LET, fantasy;
+}

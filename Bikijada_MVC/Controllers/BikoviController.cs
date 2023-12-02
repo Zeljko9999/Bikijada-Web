@@ -14,6 +14,7 @@ namespace Bikijada_MVC.Controllers
     {
         private BikijadaContext db = new BikijadaContext();
 
+        List<string> kategorijaList = new List<string> { "Poluteška", "Teška" };
 
         // GET: Bikovi
         public ActionResult Index()
@@ -77,11 +78,15 @@ namespace Bikijada_MVC.Controllers
             {
                 var vlasnik = db.Vlasnik.Find(vlasnikId);
                 ViewBag.VlasnikId = new SelectList(db.Vlasnik, "ID", "Ime",vlasnik.ID);
-            }else
-            {
+
+            } else {
+
                 ViewBag.VlasnikId = new SelectList(db.Vlasnik, "ID", "Ime");
             }
-            
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
+
+
             return View();
         }
 
@@ -100,6 +105,9 @@ namespace Bikijada_MVC.Controllers
             }
 
             ViewBag.VlasnikId = new SelectList(db.Vlasnik, "ID", "Ime", bik.VlasnikId);
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
+
             return View(bik);
         }
 
@@ -117,6 +125,9 @@ namespace Bikijada_MVC.Controllers
                 return NotFound();
             }
             ViewBag.VlasnikId = new SelectList(db.Vlasnik, "ID", "Ime", bik.VlasnikId);
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
+
             return View(bik);
         }
 
@@ -134,6 +145,9 @@ namespace Bikijada_MVC.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.VlasnikId = new SelectList(db.Vlasnik, "ID", "Ime", bik.VlasnikId);
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
+
             return View(bik);
         }
 
@@ -164,19 +178,17 @@ namespace Bikijada_MVC.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult GetBullsForOwner(string? vlasnikName)
+        public ActionResult GetBullsForOwner(string? vlasnikName, string? kategorija)
         {
             if (vlasnikName != null)
             {
-                int vlasnikId = 0;
-                ViewBag.newOwner = db.Vlasnik.Where(x => x.Ime == vlasnikName).ToList();
-                foreach(var owner in ViewBag.newOwner)
-                { 
-                vlasnikId = owner.ID;
-                }
-                var newBulls = db.Bik.Where(x => x.VlasnikId == vlasnikId).ToList();
-                return Json(newBulls);
-                
+                int vlasnikId = db.Vlasnik
+                  .Where(x => x.Ime == vlasnikName)
+                  .Select(x => x.ID)
+                  .FirstOrDefault();
+
+                var newBulls = db.Bik.Where(x => x.VlasnikId == vlasnikId && x.Kategorija == kategorija).ToList();
+                return Json(newBulls);      
             }
             else
             {

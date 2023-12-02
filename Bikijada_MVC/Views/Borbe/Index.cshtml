@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Borbe bikova</h1>
+<h1 style="padding-top:20px; padding-bottom:10px">Borbe bikova</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -14,10 +14,10 @@
     <thead>
         <tr>
             <th>
-                ID borbe
+                @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Html.DisplayNameFor(model => model.Kategorija)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Vlasnik1)
@@ -40,10 +40,10 @@
         @foreach (var item in Model) {
         <tr>
             <td>
-                <b>@Html.DisplayFor(modelItem => item.ID)</b>
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Date)
+           </td>
+           <td>
+                @Html.DisplayFor(modelItem => item.Kategorija)
            </td>
            <td>
                 @Html.DisplayFor(modelItem => item.Vlasnik1)

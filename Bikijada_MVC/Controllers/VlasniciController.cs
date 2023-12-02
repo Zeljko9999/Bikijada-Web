@@ -64,6 +64,32 @@ namespace Bikijada_MVC.Controllers
             return View(vlasnik);
         }
 
+        // metoda koja osigurava jedinstvenost imena pri kreiranju i editiranju
+        public JsonResult IsNameUnique(int ID, string Ime)
+        {
+            var vlasnik = db.Vlasnik.FirstOrDefault(v => v.Ime == Ime);
+
+            int redni = -1;
+
+            if (vlasnik != null)
+            redni = vlasnik.ID;
+            
+            // Check if a Vlasnik with the same name exists in the database
+            bool isNameExists = db.Vlasnik.Any(v => v.Ime == Ime);
+
+            if (isNameExists && redni != ID)
+
+                return Json(false);
+
+            else if (isNameExists && redni == ID)
+
+                return Json(true);
+
+            else
+
+                return Json(true);
+        }
+
         // GET: Vlasnici/Edit/5
         public ActionResult Edit(int? id)
         {

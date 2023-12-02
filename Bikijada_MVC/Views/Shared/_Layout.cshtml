@@ -10,25 +10,37 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header style="position:sticky; top:0; background-color:chocolate; font-family:'lucida sans'; height:70px; border-bottom: 2px solid black;">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="height:70px">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Bikijada</a>
+                <div class="navbar-brandon" style="color:black; display:flex; flex-direction:column">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="padding-right:3rem; font-size:20px; font-family:cursive; font-weight:bold; font-style:italic; margin-bottom: -10px; text-align:center">Bikijada</a>
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="padding-right:3rem; font-size:20px; font-family:cursive; font-weight:bold; font-style:italic">Šestanovac</a>
+                </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1" style="text-decoration:none">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Vlasnici" asp-action="Index">Vlasnici</a>
+                            <b><a style="padding-left:1rem" class="nav-link" asp-area="" asp-controller="Vlasnici" asp-action="Index">Vlasnici</a></b>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Bikovi" asp-action="Index">Bikovi</a>
+                            <b>  <a class="nav-link" asp-area="" asp-controller="Bikovi" asp-action="Index">Bikovi</a></b>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Borbe" asp-action="Index">Borbe bikova</a>
+                            <b> <a class="nav-link" asp-area="" asp-controller="Borbe" asp-action="Index">Borbe bikova</a></b>
                         </li>
+                        <li class="nav-item">
+                            <b> <a class="nav-link" asp-area="" asp-controller="Oklade" asp-action="Index">Oklade</a></b>
+                        </li>
+                    </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a style="font-size:18px; padding-right:14px; font-family:unset; color:black">Administrator</a>
+                        </li>
+                        <li><a style="font-size:15px; padding-right:3px" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
                     </ul>
                 </div>
             </div>
@@ -51,3 +63,46 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<style>
+
+    .navbar-light .navbar-nav .nav-link {
+        color: black;
+    }
+
+    .navbar-light .navbar-nav .nav-link:hover {
+        color:lightgrey;
+    }
+        /* Style the ::after pseudo-element */
+        nav::after {
+            content: ''; /* Add content to the pseudo-element */
+            position: absolute; /* Position it absolutely within the anchor tag */
+            width: 100%; /* Take the full width of the anchor */
+            height: 2px; /* Set a height for the line */
+            background-color: transparent; /* Set initial background color */
+            bottom: 0; /* Position it at the bottom of the anchor */
+            left: 0; /* Position it at the left of the anchor */
+            transition: background-color 0.3s; /* Add a smooth transition effect */
+        }
+
+        /* Change the background-color of the ::after pseudo-element on hover */
+        nav:hover::after {
+            background-color: #007bff; /* Change the background color on hover */
+        }
+
+     ul li a::after {
+        content: ''; /* Add content to the pseudo-element */
+        position: absolute; /* Position it absolutely within the anchor tag */
+        width: 100%; /* Take the full width of the anchor */
+        height: 2px; /* Set a height for the line */
+        background-color: black; /* Set initial background color */
+        bottom: 0; /* Position it at the bottom of the anchor */
+        left: 0; /* Position it at the left of the anchor */
+        transition: background-color 0.3s; /* Add a smooth transition effect */
+    }
+
+    /* Change the background-color of the ::after pseudo-element on hover */
+    ul li a:hover::after {
+        background-color:white; /* Change the background color on hover */
+    }
+</style>

@@ -5,17 +5,23 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1 style="padding-top:20px; padding-bottom:10px">Details</h1>
 
 <div>
-    <h4>Borba</h4>
+    <h4 style="padding-top:20px; padding-bottom:10px">Borba</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date);
+            @Html.DisplayNameFor(model => model.Date):
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Kategorija):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Kategorija)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Vlasnik1):

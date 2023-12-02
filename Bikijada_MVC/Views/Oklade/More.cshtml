@@ -1,0 +1,168 @@
+﻿@model Bikijada_MVC.Models.Oklada
+
+@{
+    ViewData["Title"] = "More";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* Override Bootstrap button styles */
+        .btn.btn-primary {
+            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Apply transitions to box-shadow and transform */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow by default */
+        }
+
+            .btn.btn-primary:hover {
+                background-color: #0056b3; /* Set your desired hover background color */
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Increase the shadow on hover */
+            }
+
+            .btn.btn-primary:active, .btn.btn-primary.clicked {
+                box-shadow: 0 0 8px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow when clicked */
+                transform: scale(1.1); /* Slightly scale down when clicked */
+            }
+        .btn.clicked {
+            transform: scale(1.1); /* Make it 20% larger */
+            transition: transform 0.1s ease; /* Add a smooth transition effect */
+        }
+    </style>
+</head>
+
+<h1 style="padding-top:20px; padding-bottom:10px">Pretraga oklada</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="More">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Kategorija, "Kategorija", htmlAttributes: new { @class = "control-label"})
+                <div class="col-md-10">
+                    @Html.DropDownList("Kategorija", null, htmlAttributes: new { @class = "form-control", @onchange = "UpdateBulls1()" })
+                    @Html.ValidationMessageFor(model => model.Kategorija, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Vlasnik, "Vlasnik bika", htmlAttributes: new { @class = "control-label"})
+                <div class="col-md-10">
+                    @Html.DropDownList("Vlasnik", null, htmlAttributes: new { @class = "form-control", @onchange = "UpdateBulls1()" })
+                    @Html.ValidationMessageFor(model => model.Vlasnik, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Bik, "Bik", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownList("BikId", null, htmlAttributes: new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.Bik, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div style="margin-top: 12px; margin-bottom:20px" class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" onclick="UpdateBets()" id="searchBets" />
+            </div>
+        </form>
+    </div>
+ </div>
+<p>&nbsp;</p>
+<table class="table" id="more-tablica">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Redni broj")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Iznos)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="table-body">
+
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        async function UpdateBulls1() {
+            const vlasnikName = document.getElementById("Vlasnik")?.value
+            const kategorija = document.getElementById("Kategorija")?.value
+
+            const formData = new FormData();
+            formData.append('vlasnikName', vlasnikName);
+            formData.append('kategorija', kategorija);
+
+            let response = await fetch('/Bikovi/GetBullsForOwner', {
+                method: 'POST',
+                body: formData
+            })
+
+            const bikovi = await response.json();
+            let bSelectList = document.getElementById("BikId");
+            bSelectList.innerHTML = " ";
+            bikovi.forEach(function (bik) {
+                const option = document.createElement("option");
+                option.value = bik.id;
+                option.innerHTML = bik.ime;
+                bSelectList.appendChild(option);
+            })
+        }
+
+        document.getElementById('searchBets').addEventListener('click', function (event) {
+
+            event.preventDefault();
+        })
+
+        async function UpdateBets() {
+                const vlasnikName = document.getElementById("Vlasnik")?.value
+                const kategorija = document.getElementById("Kategorija")?.value
+                const bikId = document.getElementById("BikId")?.value
+
+                const formData = new FormData();
+                formData.append('vlasnikName', vlasnikName);
+                formData.append('kategorija', kategorija);
+                formData.append('bikId', bikId);
+
+                let response = await fetch('/Oklade/GetBetsForBull', {
+                    method: 'POST',
+                    body: formData
+                })
+                const oklade = await response.json();
+
+            document.getElementById("searchBets").classList.add("clicked");
+            setTimeout(() => {
+                document.getElementById("searchBets").classList.remove("clicked");
+            }, 300);
+
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = '';
+
+            oklade.forEach((item, index) => {
+                const row = tableBody.insertRow();
+
+                // Add a column with increasing numbers starting from 1
+                const indexCell = row.insertCell();
+                indexCell.textContent = index + 1;
+
+                // Specify the columns you want to include in the table
+                const columnsToInclude = ['Ime', 'Iznos'];
+
+                columnsToInclude.forEach(column => {
+                    const cell = row.insertCell();
+                    cell.textContent = item[column.toLowerCase()];
+                });
+            });
+
+         }
+        
+    </script>
+}

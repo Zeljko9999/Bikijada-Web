@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Bikijada_MVC.Models.Home>
+
+@{
+    ViewData["Title"] = "Details";
+
+}
+
+<h1 style="padding-top:20px; padding-bottom:10px">Poruke korisnika</h1>
+
+
+<table class ="table" style="table-layout:fixed; width: 100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Naslov)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Poruka)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr >
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naslov)
+                </td>
+                <td style="word-wrap: break-word">
+                    @Html.DisplayFor(modelItem => item.Poruka)
+                </td>
+                <td style="text-align: center;">
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="back" style="height:100px">
+    <a asp-action="Index">Back to Home</a>
+</div>
+
+<style>
+
+    table.table th:last-child,
+    table.table td:last-child  {
+        width: 100px; }
+
+    table.table th:nth-child(2),
+    table.table td:nth-child(2) {
+        width: 300px;
+    }
+
+    table.table th:first-child,
+    table.table td:first-child {
+        width: 300px;
+    }
+
+
+</style>

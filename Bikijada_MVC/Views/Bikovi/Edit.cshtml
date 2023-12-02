@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1 style="padding-top:20px; padding-bottom:10px">Edit</h1>
 
-<h4>Bik</h4>
+<h4 style="padding-top:20px; padding-bottom:10px">Bik</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,7 +16,7 @@
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Kategorija" class="control-label"></label>
-                <input asp-for="Kategorija" class="form-control" />
+                <select asp-for="Kategorija" class="form-control" asp-items="ViewBag.Kategorija"></select>
                 <span asp-validation-for="Kategorija" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -29,7 +29,7 @@
                 <input asp-for="Ime" class="form-control" />
                 <span asp-validation-for="Ime" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div style="margin-top: 12px" class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

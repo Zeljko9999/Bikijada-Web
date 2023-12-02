@@ -14,10 +14,12 @@ namespace Bikijada_MVC.Controllers
     {
         private BikijadaContext db = new BikijadaContext();
 
+        List<string> kategorijaList = new List<string> { "Poluteška", "Teška" };
+
         // GET: Oklade
         public ActionResult Index()
         {
-            var oklade = db.Oklada.Include(r => r.Borba);
+            var oklade = db.Oklada.Include(r => r.Bik);
             return View(oklade.ToList());
         }
 
@@ -28,7 +30,7 @@ namespace Bikijada_MVC.Controllers
             {
                 return NotFound();
             }
-            var oklada = db.Oklada.Include(r => r.Borba).SingleOrDefault(x => x.ID == id);
+            var oklada = db.Oklada.Include(r => r.Bik).SingleOrDefault(x => x.ID == id);
             if (oklada == null)
             {
                 return NotFound(); ;
@@ -39,18 +41,24 @@ namespace Bikijada_MVC.Controllers
         // GET: Oklade/Create
         public ActionResult Create()
         {
-            ViewBag.Borba = new SelectList(db.Borba, "ID", "ID");
+            var vlasnici = db.Vlasnik;
+
+            int? firstId = vlasnici.FirstOrDefault()?.ID;
+            ViewBag.Vlasnik = new SelectList(vlasnici, "Ime", "Ime", firstId);
+            ViewBag.BikId = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime");
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
             return View();
         }
-    }
-}
+    
+
 
         // POST: Oklade/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-/*       [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("ID,Ime,Iznos,Bik,Vlasnik")] Oklada oklada)
+        public ActionResult Create([Bind("ID,Ime,Iznos,Kategorija,Vlasnik,BikId")] Oklada oklada)
         {
             if (ModelState.IsValid)
             {
@@ -59,36 +67,33 @@ namespace Bikijada_MVC.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Bik1Id = new SelectList(db.Bik, "ID", "Ime", borba.Bik1Id);
-            ViewBag.Vlasnik1 = new SelectList(db.Bik, "Ime", "Ime", borba.Vlasnik1);
-            ViewBag.Bik2Id = new SelectList(db.Bik, "ID", "Ime", borba.Bik2Id);
-            ViewBag.Vlasnik2 = new SelectList(db.Bik, "Ime", "Ime", borba.Vlasnik2);
-            return View(borba);
-        }
-        public async Task<IActionResult> Create([Bind("ID,Ime,Iznos,Bik,Vlasnik")] Oklada oklada)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(oklada);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            int firstId = db.Vlasnik.FirstOrDefault().ID;
+            ViewBag.BikId = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime", oklada.BikId);
+            ViewBag.Vlasnik = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
+
             return View(oklada);
         }
 
         // GET: Oklade/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
-            if (id == null || _context.Oklada == null)
+            if (id == null)
             {
                 return NotFound();
             }
-
-            var oklada = await _context.Oklada.FindAsync(id);
+            var oklada = db.Oklada.Find(id);
             if (oklada == null)
             {
                 return NotFound();
             }
+            int firstId = db.Vlasnik.FirstOrDefault().ID;
+            ViewBag.Vlasnik = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
+            ViewBag.BikId = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId), "ID", "Ime", oklada.BikId);
+
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
             return View(oklada);
         }
 
@@ -97,77 +102,95 @@ namespace Bikijada_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Ime,Iznos,Bik,Vlasnik")] Oklada oklada)
+        public ActionResult Edit([Bind("ID,Ime,Iznos,Kategorija,Vlasnik,BikId")] Oklada oklada)
         {
-            if (id != oklada.ID)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(oklada);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OkladaExists(oklada.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                db.Entry(oklada).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
+            int firstId = db.Vlasnik.FirstOrDefault().ID;
+
+            ViewBag.BikId = new SelectList(db.Bik, "ID", "Ime", oklada.BikId);
+            ViewBag.Vlasnik = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
             return View(oklada);
         }
 
+
         // GET: Oklade/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
-            if (id == null || _context.Oklada == null)
+            if (id == null)
             {
                 return NotFound();
             }
-
-            var oklada = await _context.Oklada
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var oklada = db.Oklada.Include(r => r.Bik).SingleOrDefault(x => x.ID == id);
             if (oklada == null)
             {
                 return NotFound();
             }
-
             return View(oklada);
         }
 
         // POST: Oklade/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            if (_context.Oklada == null)
+            var oklada = db.Oklada.Find(id);
+            db.Oklada.Remove(oklada);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+        //Pretraga prema bikovima
+        // GET: Oklade/More
+        public ActionResult More()
+        {
+            var vlasnici = db.Vlasnik;
+
+            int? firstId = vlasnici.FirstOrDefault()?.ID;
+            ViewBag.Vlasnik = new SelectList(vlasnici, "Ime", "Ime", firstId);
+            ViewBag.BikId = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime");
+
+            ViewBag.Kategorija = new SelectList(kategorijaList);
+            return View();
+        }
+
+        public ActionResult GetBetsForBull(string? vlasnikName, string? kategorija, int? bikId)
+        {
+            if (bikId != null)
             {
-                return Problem("Entity set 'BikijadaContext.Oklada'  is null.");
+                var newBets = db.Oklada.Where(x => x.Vlasnik == vlasnikName && x.Kategorija.Equals(kategorija) && 
+                x.BikId.Equals(bikId)).ToList();
+
+                return Json(newBets);   
             }
-            var oklada = await _context.Oklada.FindAsync(id);
-            if (oklada != null)
+            else
             {
-                _context.Oklada.Remove(oklada);
+                var error = "Bik not found";
+                return Json(error);
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         private bool OkladaExists(int id)
         {
-          return _context.Oklada.Any(e => e.ID == id);
+            return db.Oklada.Any(e => e.ID == id);
         }
     }
 }
-*/
+
