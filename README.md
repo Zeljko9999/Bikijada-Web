@@ -1,1 +1,1 @@
-# Bikijada_MVC
+Seminarski rad iz kolegija Napredne Web tehnologije
