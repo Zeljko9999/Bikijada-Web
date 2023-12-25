@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="~/js/UpdateSelectLists1.jsx"></script>
+<script src="~/js/UpdateSelectLists2.jsx"></script>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,14 +52,14 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Vlasnik, "Vlasnik bika", htmlAttributes: new { @class = "control-label"})
                 <div class="col-md-10">
-                    @Html.DropDownList("Vlasnik", null, htmlAttributes: new { @class = "form-control", @onchange = "UpdateBulls1()" })
+                    @Html.DropDownList("Vlasnik1", null, htmlAttributes: new { @class = "form-control", @onchange = "UpdateBulls1()" })
                     @Html.ValidationMessageFor(model => model.Vlasnik, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(model => model.Bik, "Bik", htmlAttributes: new { @class = "control-label" })
                 <div class="col-md-10">
-                    @Html.DropDownList("BikId", null, htmlAttributes: new { @class = "form-control"})
+                    @Html.DropDownList("Bik1Id", null, htmlAttributes: new { @class = "form-control"})
                     @Html.ValidationMessageFor(model => model.Bik, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -93,76 +96,12 @@
     }
 
     <script>
-        async function UpdateBulls1() {
-            const vlasnikName = document.getElementById("Vlasnik")?.value
-            const kategorija = document.getElementById("Kategorija")?.value
-
-            const formData = new FormData();
-            formData.append('vlasnikName', vlasnikName);
-            formData.append('kategorija', kategorija);
-
-            let response = await fetch('/Bikovi/GetBullsForOwner', {
-                method: 'POST',
-                body: formData
-            })
-
-            const bikovi = await response.json();
-            let bSelectList = document.getElementById("BikId");
-            bSelectList.innerHTML = " ";
-            bikovi.forEach(function (bik) {
-                const option = document.createElement("option");
-                option.value = bik.id;
-                option.innerHTML = bik.ime;
-                bSelectList.appendChild(option);
-            })
-        }
 
         document.getElementById('searchBets').addEventListener('click', function (event) {
 
             event.preventDefault();
         })
 
-        async function UpdateBets() {
-                const vlasnikName = document.getElementById("Vlasnik")?.value
-                const kategorija = document.getElementById("Kategorija")?.value
-                const bikId = document.getElementById("BikId")?.value
-
-                const formData = new FormData();
-                formData.append('vlasnikName', vlasnikName);
-                formData.append('kategorija', kategorija);
-                formData.append('bikId', bikId);
-
-                let response = await fetch('/Oklade/GetBetsForBull', {
-                    method: 'POST',
-                    body: formData
-                })
-                const oklade = await response.json();
-
-            document.getElementById("searchBets").classList.add("clicked");
-            setTimeout(() => {
-                document.getElementById("searchBets").classList.remove("clicked");
-            }, 300);
-
-            const tableBody = document.getElementById('table-body');
-            tableBody.innerHTML = '';
-
-            oklade.forEach((item, index) => {
-                const row = tableBody.insertRow();
-
-                // Add a column with increasing numbers starting from 1
-                const indexCell = row.insertCell();
-                indexCell.textContent = index + 1;
-
-                // Specify the columns you want to include in the table
-                const columnsToInclude = ['Ime', 'Iznos'];
-
-                columnsToInclude.forEach(column => {
-                    const cell = row.insertCell();
-                    cell.textContent = item[column.toLowerCase()];
-                });
-            });
-
-         }
         
     </script>
 }

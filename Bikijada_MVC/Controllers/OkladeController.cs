@@ -44,8 +44,8 @@ namespace Bikijada_MVC.Controllers
             var vlasnici = db.Vlasnik;
 
             int? firstId = vlasnici.FirstOrDefault()?.ID;
-            ViewBag.Vlasnik = new SelectList(vlasnici, "Ime", "Ime", firstId);
-            ViewBag.BikId = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime");
+            ViewBag.Vlasnik1 = new SelectList(vlasnici, "Ime", "Ime", firstId);
+            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime");
 
             ViewBag.Kategorija = new SelectList(kategorijaList);
             return View();
@@ -68,8 +68,8 @@ namespace Bikijada_MVC.Controllers
             }
 
             int firstId = db.Vlasnik.FirstOrDefault().ID;
-            ViewBag.BikId = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime", oklada.BikId);
-            ViewBag.Vlasnik = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
+            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime", oklada.BikId);
+            ViewBag.Vlasnik1 = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
 
             ViewBag.Kategorija = new SelectList(kategorijaList);
 
@@ -89,8 +89,8 @@ namespace Bikijada_MVC.Controllers
                 return NotFound();
             }
             int firstId = db.Vlasnik.FirstOrDefault().ID;
-            ViewBag.Vlasnik = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
-            ViewBag.BikId = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId), "ID", "Ime", oklada.BikId);
+            ViewBag.Vlasnik1 = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
+            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId), "ID", "Ime", oklada.BikId);
 
 
             ViewBag.Kategorija = new SelectList(kategorijaList);
@@ -112,8 +112,8 @@ namespace Bikijada_MVC.Controllers
             }
             int firstId = db.Vlasnik.FirstOrDefault().ID;
 
-            ViewBag.BikId = new SelectList(db.Bik, "ID", "Ime", oklada.BikId);
-            ViewBag.Vlasnik = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
+            ViewBag.Bik1Id = new SelectList(db.Bik, "ID", "Ime", oklada.BikId);
+            ViewBag.Vlasnik1 = new SelectList(db.Vlasnik, "Ime", "Ime", firstId);
 
             ViewBag.Kategorija = new SelectList(kategorijaList);
             return View(oklada);
@@ -154,8 +154,8 @@ namespace Bikijada_MVC.Controllers
             var vlasnici = db.Vlasnik;
 
             int? firstId = vlasnici.FirstOrDefault()?.ID;
-            ViewBag.Vlasnik = new SelectList(vlasnici, "Ime", "Ime", firstId);
-            ViewBag.BikId = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime");
+            ViewBag.Vlasnik1 = new SelectList(vlasnici, "Ime", "Ime", firstId);
+            ViewBag.Bik1Id = new SelectList(db.Bik.Where(b => b.VlasnikId == firstId && b.Kategorija == "Poluteška"), "ID", "Ime");
 
             ViewBag.Kategorija = new SelectList(kategorijaList);
             return View();

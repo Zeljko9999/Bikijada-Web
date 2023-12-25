@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="~/js/UpdateSelectLists1.jsx"></script>
+
 <h1 style="padding-top:20px; padding-bottom:10px">Edit</h1>
 
 <h4 style="padding-top:20px; padding-bottom:10px">Oklada</h4>
@@ -25,14 +27,25 @@
                 <span asp-validation-for="Iznos" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Bik" class="control-label"></label>
-                <input asp-for="Bik" class="form-control" />
-                <span asp-validation-for="Bik" class="text-danger"></span>
+                @Html.LabelFor(model => model.Kategorija, "Kategorija", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Kategorija", null, htmlAttributes: new { @class = "form-control", @onchange = "UpdateBulls1()" })
+                    @Html.ValidationMessageFor(model => model.Kategorija, "", new { @class = "text-danger" })
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="Vlasnik" class="control-label"></label>
-                <input asp-for="Vlasnik" class="form-control" />
-                <span asp-validation-for="Vlasnik" class="text-danger"></span>
+                @Html.LabelFor(model => model.Vlasnik, "Vlasnik bika", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Vlasnik1", null, htmlAttributes: new { @class = "form-control", @onchange = "UpdateBulls1()" })
+                    @Html.ValidationMessageFor(model => model.Vlasnik, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Bik, "Bik", htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Bik1Id", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Bik, "", new { @class = "text-danger" })
+                </div>
             </div>
             <div style="margin-top: 12px" class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

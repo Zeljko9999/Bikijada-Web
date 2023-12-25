@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="~/js/UpdateSelectLists1.jsx"></script>
+
 <h1 style="padding-top:20px; padding-bottom:10px">Create</h1>
 
 <h4 style="padding-top:20px; padding-bottom:10px">Borba</h4>
@@ -70,54 +72,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script>
-       async function UpdateBulls1() {
-            const vlasnikName = document.getElementById("Vlasnik1")?.value
-            const Kategorija = document.getElementById("Kategorija")?.value
-
-            const formData = new FormData();
-            formData.append('vlasnikName', vlasnikName);
-            formData.append('Kategorija', Kategorija);
-
-            let response = await fetch('/Bikovi/GetBullsForOwner',{
-                method:'POST',
-                body: formData
-            })
-
-            const bikovi = await response.json();
-            let bSelectList = document.getElementById("Bik1Id");
-            bSelectList.innerHTML = " ";
-            bikovi.forEach (function (bik) {
-                const option = document.createElement("option");
-                option.value = bik.id;
-                option.innerHTML = bik.ime;
-                bSelectList.appendChild(option);
-            })
-        }
-
-        async function UpdateBulls2() {
-            const vlasnikName = document.getElementById("Vlasnik2")?.value
-            const Kategorija = document.getElementById("Kategorija")?.value
-
-            const formData = new FormData();
-            formData.append('vlasnikName', vlasnikName)
-            formData.append('Kategorija', Kategorija);
-
-            let response = await fetch('/Bikovi/GetBullsForOwner', {
-                method: 'POST',
-                body: formData
-            })
-
-            const bikovi = await response.json();
-            let bSelectList = document.getElementById("Bik2Id");
-            bSelectList.innerHTML = " ";
-            bikovi.forEach(function (bik) {
-                const option = document.createElement("option");
-                option.value = bik.id;
-                option.innerHTML = bik.ime;
-                bSelectList?.appendChild(option);
-            })
-        }
-
-    </script>
 }
